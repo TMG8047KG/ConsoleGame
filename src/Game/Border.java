@@ -10,6 +10,13 @@ public class Border {
     private int columns;
     private int rows;
 
+    public int getRows() {
+        return rows;
+    }
+    public int getColumns() {
+        return columns;
+    }
+
     /**
      * Sets the border size
      * @param rows
