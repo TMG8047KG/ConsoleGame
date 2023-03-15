@@ -2,26 +2,50 @@ package Game;
 
 import Console.Terminal;
 
-import java.util.Scanner;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-public class Main {
+public class Main{
+
     public static void main(String[] args) {
         Terminal terminal = new Terminal(450, 650);
-        Border border = new Border();
-        terminal.buildWindow();
-        border.setBorderSize(20, 20);
-        border.setSymbol('*');
-//        border.printBorder();
-        terminal.println("tosho");
-        System.out.println(terminal.readLine());
+        Matrix matrix = new Matrix();
+        terminal.setEditable(false);
+        terminal.build();
+        matrix.setBorderSize(20, 30);
+        matrix.setSymbol('*');
+        terminal.setMatix(matrix.getMatrixWithBorder());
+        terminal.printMatrix();
 
-        char[][] test = border.getBorder();
-        for(int a = 0; a<border.getRows();a++){
-            for(int b = 0; b<border.getColumns();b++){
-                terminal.print(test[a][b] + " ");
+        //WASD input
+        KeyListener keyListener = new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
             }
-            terminal.println();
-        }
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_W){
+                    System.out.println("Forward!");
+                }
+                if(e.getKeyCode() == KeyEvent.VK_A){
+                    System.out.println("Left!");
+                }
+                if(e.getKeyCode() == KeyEvent.VK_S){
+                    System.out.println("Downwards!");
+                }
+                if(e.getKeyCode() == KeyEvent.VK_D){
+                    System.out.println("Right!");
+                }
+            }
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        };
+        terminal.addKeyListener(keyListener);
+
+
         //Problem thing
         System.out.println(terminal.readLine());
     }

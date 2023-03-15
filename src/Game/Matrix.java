@@ -3,7 +3,7 @@ package Game;
 /**
  * @author TMG8047KG
  */
-public class Border {
+public class Matrix {
 
     private char[][] border;
     private char symbol;
@@ -40,7 +40,7 @@ public class Border {
     }
 
     /**
-     * Builds the border by setting all sides with the set {@link Game.Border#symbol}
+     * Builds the border by setting all sides with the set {@link Matrix#symbol}
      * */
     private void buildBorder(){
         for(int a = 0; a < rows; a++){
@@ -61,8 +61,7 @@ public class Border {
     /**
      * Prints the {@link #border}
      */
-    public void printBorder(){
-        buildBorder();
+    public void printMatrix(){
         for(int a = 0; a < rows; a++){
             for(int b = 0; b < columns; b++){
                 System.out.print(border[a][b] + "  ");
@@ -75,7 +74,7 @@ public class Border {
      * Gets the matrix with the set {@link #border}
      * @return Returns matrix with border
      * */
-    public char[][] getBorder() {
+    public char[][] getMatrixWithBorder() {
         buildBorder();
         return border;
     }
