@@ -1,11 +1,11 @@
 package Game;
 
 import Console.Terminal;
-
+import Console.TerminalScheduleUpdate;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class Main{
+public class Main {
 
     public static void main(String[] args) {
         Terminal terminal = new Terminal(450, 650);
@@ -16,6 +16,26 @@ public class Main{
         matrix.setSymbol('*');
         terminal.setMatix(matrix.getMatrixWithBorder());
         terminal.printMatrix();
+
+        TerminalScheduleUpdate update = new TerminalScheduleUpdate() {
+            final char[][] test = terminal.getCharMatrix();
+            int x = 0, y = 1;
+            @Override
+            public void Update() {
+                x++;
+                if(x == test.length-1){
+                    y++;
+                    x=1;
+                }
+                test[x][y] = '0';
+                terminal.setMatix(test);
+                terminal.clear();
+                terminal.printMatrix();
+            }
+        };
+        terminal.addSchedule(update);
+        terminal.start();
+
 
         //WASD input
         KeyListener keyListener = new KeyListener() {
@@ -44,9 +64,5 @@ public class Main{
             }
         };
         terminal.addKeyListener(keyListener);
-
-
-        //Problem thing
-        System.out.println(terminal.readLine());
     }
 }

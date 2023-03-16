@@ -1,14 +1,22 @@
 package Console;
 
+import Game.Main;
+
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicScrollBarUI;
+import javax.swing.text.WrappedPlainView;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Terminal {
     private JPanel MainPanel;
     private JTextArea textArea;
+    private JScrollPane scroll;
     private final int height;
     private final int width;
     private boolean editable;
@@ -16,6 +24,8 @@ public class Terminal {
     private String[][] stringMatrix;
     private int[][] intMatrix;
     private final List<String> input = new ArrayList<>();
+    ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+    TerminalScheduleUpdate scheduleUpdate;
 
     //Constructor
     /**
@@ -27,6 +37,16 @@ public class Terminal {
     public Terminal(int height, int width){
         this.height = height;
         this.width = width;
+    }
+
+    public void addSchedule(TerminalScheduleUpdate scheduleUpdate){
+        this.scheduleUpdate = scheduleUpdate;
+    }
+    public TerminalScheduleUpdate getSchedule(){
+        return scheduleUpdate;
+    }
+    public void start(){
+        executor.scheduleWithFixedDelay(scheduleUpdate::Update, 1000, 1000, TimeUnit.MILLISECONDS);
     }
 
     public String readLine() {
@@ -48,7 +68,6 @@ public class Terminal {
         KeyListener readLine = new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
-
             }
             @Override
             public void keyPressed(KeyEvent e) {
@@ -64,7 +83,6 @@ public class Terminal {
             }
             @Override
             public void keyReleased(KeyEvent e) {
-
             }
         };
         textArea.addKeyListener(readLine);
@@ -114,6 +132,15 @@ public class Terminal {
             }
         }
     }
+    public int[][] getIntMatrix(){
+        return intMatrix;
+    }
+    public char[][] getCharMatrix(){
+        return charMatrix;
+    }
+    public String[][] getStringMatrix(){
+        return stringMatrix;
+    }
 
     //Basic input methods
     public void setText(String text){
@@ -136,17 +163,29 @@ public class Terminal {
     private void createUIComponents() {
         textArea.setBackground(new Color(0, 0,0));
         textArea.setForeground(new Color(0, 222, 29));
-        textArea.setFont(new Font("Cascadia Code", Font.PLAIN,14));
+        textArea.setFont(new Font("Courier New", Font.BOLD,16));
         textArea.setEditable(editable);
+
+//        textArea.setEditable(false);
+//        scroll = new JScrollPane(textArea);
+//        scroll.getVerticalScrollBar().setBackground(new Color(0, 0,0));
+//        scroll.getVerticalScrollBar().setUI(new BasicScrollBarUI(){
+//            @Override
+//            protected void configureScrollBarColors() {
+//                this.thumbColor = new Color(0, 222, 29);
+//            }
+//        });
+//        scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
     }
 
     public void build(){
+        createUIComponents();
+
         JFrame frame = new JFrame("Console");
         frame.setSize(width, height);
+        //TODO: add scroll
         frame.setContentPane(textArea);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-
-        createUIComponents();
     }
 }
