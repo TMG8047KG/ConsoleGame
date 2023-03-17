@@ -2,6 +2,8 @@ package Game;
 
 import Console.Terminal;
 import Console.TerminalScheduleUpdate;
+
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -11,8 +13,10 @@ public class Main {
         Terminal terminal = new Terminal(450, 650);
         Matrix matrix = new Matrix();
         terminal.setEditable(false);
+        terminal.setFont(new Font(Font.MONOSPACED, Font.BOLD, 16));
+        terminal.setFontColor(new Color(140, 3, 252));
         terminal.build();
-        matrix.setBorderSize(20, 30);
+        matrix.setBorderSize(21, 31);
         matrix.setSymbol('*');
         terminal.setMatix(matrix.getMatrixWithBorder());
         terminal.printMatrix();
@@ -26,6 +30,7 @@ public class Main {
                 if(x == test.length-1){
                     y++;
                     x=1;
+                    terminal.stop();
                 }
                 test[x][y] = '0';
                 terminal.setMatix(test);
@@ -33,7 +38,7 @@ public class Main {
                 terminal.printMatrix();
             }
         };
-        terminal.addSchedule(update);
+        terminal.setSchedule(update);
         terminal.start();
 
 
@@ -41,10 +46,12 @@ public class Main {
         KeyListener keyListener = new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
-
             }
             @Override
             public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_G){
+                    terminal.clear();
+                }
                 if(e.getKeyCode() == KeyEvent.VK_W){
                     System.out.println("Forward!");
                 }
@@ -60,7 +67,6 @@ public class Main {
             }
             @Override
             public void keyReleased(KeyEvent e) {
-
             }
         };
         terminal.addKeyListener(keyListener);
